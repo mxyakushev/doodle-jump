@@ -4,19 +4,21 @@ const game = document.querySelector('.game');
 const doodle = document.querySelector('.doodle');
 const lose = document.querySelector('.lose');
 const platformWrapper = document.querySelector('.platform-wrapper');
+const score = document.querySelector('.score');
+const cardScore = document.querySelector('.card-score');
 
 const totalPlatform = 1000;
-const gameWidth = 500;
-const gameHeight = 600;
+const gameWidth = window.innerWidth;
+const gameHeight = window.innerHeight;
 const doodleWidth = 70;
 const doodleHeight = 100;
 const platformWidth = 110;
 const platformHeight = 30;
-const platformGap = 230;
 const gravity = 0.5;
 
 // VARIABLES
 
+let platformGap = 0;
 let platformCoords = [];
 let xPosition = 0;
 let yPosition = 0;
@@ -26,6 +28,10 @@ let doodleScale = -1;
 let animationFrame = 0;
 let distanceToPlatform = platformGap * totalPlatform;
 let platformArrHTML = [];
+let gameScore = 0;
+let initialScrollTop = 0;
+
+score.innerText = gameScore;
 
 // LISTENERS
 
@@ -53,6 +59,7 @@ window.addEventListener('click', (e) => {
 
 // FUNCTIONS
 
+setGameSize();
 startTheGame();
 
 function startTheGame(){
@@ -77,6 +84,7 @@ function setPlatformCoords() {
 
 function getStartPoint() {
     game.scrollTop = game.scrollHeight;
+    initialScrollTop = game.scrollTop;
     xPosition = platformCoords[totalPlatform];
     yPosition = totalPlatform * platformGap;
 }
@@ -90,6 +98,7 @@ function showGame() {
     checkOnPlatform();
     scrollGame();
     makePlatformsTransparent();
+    setGameScore();
 
     doodle.style.transform = `translate(${xPosition}px, ${yPosition - doodleHeight}px) scaleX(${doodleScale})`;
     animationFrame = requestAnimationFrame(showGame);
@@ -135,8 +144,9 @@ function makePlatformsTransparent() {
 }
 
 function checkLosing(){
-    if(yPosition > game.scrollTop + gameHeight * 1.5){
+    if(yPosition > game.scrollTop + gameHeight + doodleHeight){
         cancelAnimationFrame(animationFrame);
+        cardScore.innerText = `Your score: ${score.innerText}`;
         lose.classList.remove('hide');
         clearVariables();
     }
@@ -152,4 +162,19 @@ function clearVariables(){
     animationFrame = 0;
     distanceToPlatform = platformGap * totalPlatform;
     platformArrHTML = [];
+    gameScore = 0;
+}
+
+function setGameSize(){
+    if(gameWidth > 1000){
+        platformGap = 60;
+    } else if(gameWidth > 500 && gameWidth < 1000){
+        platformGap = 100;
+    } else {
+        platformGap = 200;
+    }
+}
+
+function setGameScore(){
+    score.innerText = Math.floor((initialScrollTop - game.scrollTop) / 10);
 }
