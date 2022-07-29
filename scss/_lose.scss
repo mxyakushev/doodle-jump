@@ -12,7 +12,10 @@
     background-color: #fff;
     padding: 20px;
     font-size: 40px;
-    font-family: 'Roboto', sans-serif, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card-score {
+    font-size: 25px;
 }
 
 .card-title {
@@ -23,7 +26,7 @@
     width: 100%;
     padding: 5px;
     font-size: 20px;
-    background-color: rgb(167, 203, 219);
+    background-color: rgb(144, 207, 182);
     transition: opacity .3s ease;
 
     &:hover {
